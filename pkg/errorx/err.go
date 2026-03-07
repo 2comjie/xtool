@@ -1,15 +1,19 @@
 package errorx
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type IErr interface {
 	Msg() string
 	Code() int32
+	Err() error
 }
 
 type stringErr struct {
 	msg  string
 	code int32
+	err  error
 }
 
 func (s stringErr) Msg() string {
@@ -20,10 +24,15 @@ func (s stringErr) Code() int32 {
 	return s.code
 }
 
+func (s stringErr) Err() error {
+	return s.err
+}
+
 func NewStringErr(err string, code int32) IErr {
 	return &stringErr{
 		msg:  err,
 		code: code,
+		err:  fmt.Errorf("msg %s code %d", err, code),
 	}
 }
 func NewFormatErr(format string, vs ...any) IErr {
@@ -31,5 +40,6 @@ func NewFormatErr(format string, vs ...any) IErr {
 	return &stringErr{
 		msg:  errStr,
 		code: 0,
+		err:  fmt.Errorf("msg %s code 0", errStr),
 	}
 }
