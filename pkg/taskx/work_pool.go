@@ -13,13 +13,13 @@ type ITask interface {
 }
 
 type Pool struct {
-	nextId   atomic.Uint64
-	chanList []chan ITask
-	ctx      context.Context
-	cancel   context.CancelFunc
-	config   *Config
-	wg       sync.WaitGroup
-	stopped  atomic.Bool
+	nextId    atomic.Uint64
+	chanList  []chan ITask
+	ctx       context.Context
+	cancel    context.CancelFunc
+	config    *Config
+	wg        sync.WaitGroup
+	stopped atomic.Bool
 }
 
 func NewPool(opts ...Option) *Pool {
@@ -37,14 +37,11 @@ func NewPool(opts ...Option) *Pool {
 	for i := range p.chanList {
 		p.chanList[i] = make(chan ITask, cfg.chanSize)
 	}
-	return p
-}
-
-func (p *Pool) Start() {
 	for i := range p.chanList {
 		p.wg.Add(1)
 		go p.worker(i)
 	}
+	return p
 }
 
 func (p *Pool) Stop() {
