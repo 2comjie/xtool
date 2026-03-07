@@ -18,18 +18,14 @@ func init() {
 	global = logger.Sugar()
 }
 
-// SetGlobal 替换全局 logger。
 func SetGlobal(l *zap.SugaredLogger) {
 	global = l
 }
 
-// RawLogger 获取底层的 zap.SugaredLogger，用于高级场景。
 func RawLogger() *zap.SugaredLogger {
 	return global
 }
 
-// Init 初始化全局 logger，支持同时输出到 stdout 和文件。
-// filePath 为空则只输出到 stdout。
 func Init(level string, filePath string) {
 	lvl, err := zapcore.ParseLevel(level)
 	if err != nil {
@@ -60,12 +56,9 @@ func Init(level string, filePath string) {
 	global = logger.Sugar()
 }
 
-// Sync 刷新缓冲区，程序退出前应调用。
 func Sync() {
 	_ = global.Sync()
 }
-
-// ---- 包级别便捷函数 ----
 
 func Debug(msg string)                  { global.Debug(msg) }
 func Debugf(format string, args ...any) { global.Debugf(format, args...) }
@@ -78,7 +71,6 @@ func Errorf(format string, args ...any) { global.Errorf(format, args...) }
 func Fatal(msg string)                  { global.Fatal(msg) }
 func Fatalf(format string, args ...any) { global.Fatalf(format, args...) }
 
-// With 返回携带额外字段的 logger。
 func With(args ...any) *zap.SugaredLogger {
 	return global.With(args...)
 }
