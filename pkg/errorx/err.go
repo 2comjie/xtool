@@ -43,3 +43,7 @@ func NewFormatErr(format string, vs ...any) IErr {
 		err:  fmt.Errorf("msg %s code 0", errStr),
 	}
 }
+
+type ConstStringErr string
+
+func (e ConstStringErr) Error() string { return string(e) }
